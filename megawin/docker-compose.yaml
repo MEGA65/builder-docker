@@ -1,0 +1,7 @@
+version: "3.7"
+services:
+  megawin:
+    image: "megawin"
+    build: .
+    command: bash
+    restart: on-failure

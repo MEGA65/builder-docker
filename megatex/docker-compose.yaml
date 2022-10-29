@@ -1,0 +1,7 @@
+version: "3.7"
+services:
+  megatex:
+    image: "megatex"
+    build: .
+    command: bash
+    restart: on-failure

@@ -1,0 +1,7 @@
+version: "3.7"
+services:
+  megavivado:
+    image: "megavivado"
+    build: .
+    command: bash
+    restart: on-failure

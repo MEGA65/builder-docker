@@ -1,0 +1,7 @@
+version: "3.7"
+services:
+  megabuild:
+    image: "megabuild"
+    build: .
+    command: bash
+    restart: on-failure
