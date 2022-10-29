@@ -16,3 +16,19 @@ Custom jenkins container that allows docker access to the host system.
 
 Proxy for exposing Jenkins frontend.
 
+## megabuild
+
+Base build container for MEGA65 repositories.
+
+## megawin
+
+Adds mingw support for Windows builds to megabuild, as needed by mega65-tools.
+
+## megatex
+
+Adds texlive for megabuild, as needed by mega65-user-guide.
+
+## megavivado
+
+Adds Vivado 2019.2 as needed by mega65-core.
+

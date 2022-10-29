@@ -10,7 +10,7 @@ RUN apt update \
  && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list \
  && apt update \
- && apt install -y build-essential pkg-config git gh wget python3 cc65 sshpass unzip \
+ && apt install -y build-essential pkg-config git gh wget python3 cc65 sshpass unzip imagemagick \
                    libusb-1.0-0-dev libgif-dev libpng-dev libgtest-dev libgmock-dev libreadline-dev libtinfo5 \
  && apt clean -y
 
