@@ -12,7 +12,8 @@ RUN apt update \
  && apt update \
  && apt install -y build-essential pkg-config git gh wget python3 cc65 sshpass unzip imagemagick \
                    libusb-1.0-0-dev libgif-dev libpng-dev libgtest-dev libgmock-dev libreadline-dev libtinfo5 \
- && apt clean -y
+ && apt clean -y \
+ && useradd -u 1000 -d /home/mega -m mega
 
 # build and install exomizer
 RUN mkdir /tmp/exomizer \

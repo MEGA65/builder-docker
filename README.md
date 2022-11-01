@@ -28,7 +28,8 @@ Adds mingw support for Windows builds to megabuild, as needed by mega65-tools.
 
 Adds texlive for megabuild, as needed by mega65-user-guide.
 
-## megavivado
+## vivadomnt
 
-Adds Vivado 2019.2 as needed by mega65-core.
+A volume install using megabuild, that mounts to /opt/Xilinx
+You need to use `--init -v vivado_2019_2:/opt/Xilinx` to use it together with megabuild for a core build.
 

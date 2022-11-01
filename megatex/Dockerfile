@@ -1,8 +1,7 @@
 FROM megabuild
 
-# add mega user... better way?
-RUN useradd -u 1000 -d /home/mega -m mega \
- && apt install -y texlive-latex-extra texlive-bibtex-extra texlive-xetex latexmk xzdec \
+# install texlive
+RUN apt install -y texlive-latex-extra texlive-bibtex-extra texlive-xetex latexmk xzdec \
  && apt clean -y
 
 # install texmf stuff in user path
