@@ -11,39 +11,62 @@ VOLUMES=vivadomnt
 all: $(CONTAINERS)
 
 traefik: traefik/docker-compose.yml
-	@echo -e "\nBuilding traefik container..."
+	@echo "\nBuilding traefik container..."
 	@( cd traefik ; docker-compose build && docker-compose up -d )
 
 jenkins: jenkins/Dockerfile jenkins/docker-compose.yml
-	@echo -e "\nBuilding jenkins container..."
+	@echo "\nBuilding jenkins container..."
 	@( cd jenkins ; docker-compose build && docker-compose up -d )
 
 megabuild: megabuild/Dockerfile
-	@echo -e "\nBuilding megabuild container..."
+	@echo "\nBuilding megabuild container..."
 	@docker build -t megabuild:latest megabuild
 
 megawin: megawin/Dockerfile
-	@echo -e "\nBuilding megawin container..."
+	@echo "\nBuilding megawin container..."
 	@docker build -t megawin:latest megawin
 
 megatex: megatex/Dockerfile
-	@echo -e "\nBuilding megatex container..."
+	@echo "\nBuilding megatex container..."
 	@docker build -t megatex:latest megatex
 
 vivadomnt/Vivado-2019.2-installed.tar.gz:
-	@echo -e "\nLinking frozen Vivado to vivadomnt..."
+	@echo "\nLinking frozen Vivado to vivadomnt..."
 	ln ../dist/Vivado-2019.2-installed.tar.gz vivadomnt/Vivado-2019.2-installed.tar.gz
 
-vivadomnt: vivadomnt/Vivado-2019.2-installed.tar.gz vivadomnt/vivado_wrapper.sh vivadomnt/vivado_unpack.sh
-	@echo -e "\nBuilding vivado volume..."
+vivadomnt/Vivado-2022.2-installed.tar.gz:
+	@echo "\nLinking frozen Vivado to vivadomnt..." ; \
+	ln ../dist/Vivado-2022.2-installed.tar.gz vivadomnt/Vivado-2022.2-installed.tar.gz
+
+vivadomnt_2019_2: vivadomnt/Vivado-2019.2-installed.tar.gz vivadomnt/vivado_wrapper.sh vivadomnt/vivado_unpack.sh
+	@echo "\nBuilding vivado_2019_2 volume..."; \
 	if [ $( docker volume inspect vivado_2019_2 ) ]; then \
 		docker volume rm vivado_2019_2; \
 	fi
+	@echo "\nMaking wrapper scripts..."; \
+	perl -pe 's/==VER==/2019.2/g' < vivadomnt/vivado_unpack.sh > vivadomnt/vivado_unpack_2019_2.sh ; \
+	perl -pe 's/==VER==/2019.2/g' < vivadomnt/vivado_wrapper.sh > vivadomnt/vivado_wrapper_2019_2.sh
 	docker volume create vivado_2019_2
 	docker run --rm \
 		-v vivado_2019_2:/opt/Xilinx \
 		-v `pwd`/vivadomnt/Vivado-2019.2-installed.tar.gz:/Vivado-2019.2-installed.tar.gz \
-		-v `pwd`/vivadomnt/vivado_wrapper.sh:/vivado_wrapper.sh \
-		-v `pwd`/vivadomnt/vivado_unpack.sh:/vivado_unpack.sh \
+		-v `pwd`/vivadomnt/vivado_wrapper_2019_2.sh:/vivado_wrapper.sh \
+		-v `pwd`/vivadomnt/vivado_unpack_2019_2.sh:/vivado_unpack.sh \
+		megabuild bash vivado_unpack.sh
+
+vivadomnt_2022_2: vivadomnt/Vivado-2022.2-installed.tar.gz vivadomnt/vivado_wrapper.sh vivadomnt/vivado_unpack.sh
+	@echo "\nBuilding vivado_2022_2 volume..."; \
+	if [ $( docker volume inspect vivado_2022_2 ) ]; then \
+		docker volume rm vivado_2022_2; \
+	fi
+	@echo "\nMaking wrapper scripts..."; \
+	perl -pe 's/==VER==/2022.2/g' < vivadomnt/vivado_unpack.sh > vivadomnt/vivado_unpack_2022_2.sh ; \
+	perl -pe 's/==VER==/2022.2/g' < vivadomnt/vivado_wrapper.sh > vivadomnt/vivado_wrapper_2022_2.sh
+	docker volume create vivado_2022_2
+	docker run --rm \
+		-v vivado_2022_2:/opt/Xilinx \
+		-v `pwd`/vivadomnt/Vivado-2022.2-installed.tar.gz:/Vivado-2022.2-installed.tar.gz \
+		-v `pwd`/vivadomnt/vivado_wrapper_2022_2.sh:/vivado_wrapper.sh \
+		-v `pwd`/vivadomnt/vivado_unpack_2022_2.sh:/vivado_unpack.sh \
 		megabuild bash vivado_unpack.sh
 
