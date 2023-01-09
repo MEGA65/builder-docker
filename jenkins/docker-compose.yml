@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        JENKINS_VERSION: 2.383
+        JENKINS_VERSION: 2.385
     restart: on-failure
     ports:
       - "127.0.0.1:8080:8080"
@@ -16,7 +16,7 @@ services:
       - data:/var/jenkins_home
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jenkins-jenkins.rule=Host(`builder.mega65.org`)"
+      - "traefik.http.routers.jenkins-jenkins.rule=( Host(`builder.mega65.org`) || Host(`artifact.mega65.org`) )"
       - "traefik.http.routers.jenkins-jenkins.entrypoints=websecure"
       - "traefik.http.routers.jenkins-jenkins.tls.certresolver=mega65"
       - "traefik.http.services.jenkins-jenkins.loadbalancer.server.port=8080"
