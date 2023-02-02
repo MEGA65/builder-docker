@@ -17,10 +17,10 @@ RUN apt update \
  && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
  && locale-gen \
  && useradd -u 1000 -d /home/mega -s /bin/bash -m mega \
- && mkdir -p /home/mega/.Xilinx/Vivado/2022.2 \
+ && mkdir -p /home/mega/.Xilinx/Vivado \
  && chown -R mega:mega /home/mega/.Xilinx
 
-COPY --chown=mega:mega Vivado_init.tcl /home/mega/.Xilinx/Vivado/2022.2/Vivado_init.tcl
+COPY --chown=mega:mega Vivado_init.tcl /home/mega/.Xilinx/Vivado/Vivado_init.tcl
 
 # build and install exomizer
 RUN mkdir /tmp/exomizer \
