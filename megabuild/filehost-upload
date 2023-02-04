@@ -1,0 +1,75 @@
+#!/usr/bin/python
+
+import sys
+import argparse
+import os
+import re
+import requests
+
+VERre = re.compile(r'^\d+(\.\d)?$')
+FIDre = re.compile(r'^[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$')
+
+def main():
+    parser = argparse.ArgumentParser(description="MEGA65 Filehost Uploader")
+    parser.add_argument('-v', '--verbose', action='store_true', help='verbose output')
+    parser.add_argument('-U', '--url', default="https://files.mega65.org/php/savebuildupload.php", help="URL of filehost")
+    parser.add_argument('-A', '--apikey', help="authentication with filehost, can alos be provided via FH_API_KEY environment")
+    parser.add_argument('-i', '--fileid', required=True, help="public-id of the file entry to upload to")
+    parser.add_argument('-a', '--action', default="addversion", choices=['addversion', 'replacelatest', 'replaceall'], help="action to perform: addversion, replacelatest, replaceall")
+    parser.add_argument('-V', '--version', help="version number (XXX.X)")
+    parser.add_argument('-I', '--versiontext', help="version information text")
+    parser.add_argument('FILE', nargs=1, help="file you want to upload")
+
+    args = parser.parse_args()
+    if not args.apikey:
+        args.apikey = os.environ.get('FH_API_KEY')
+        if not args.apikey:
+            sys.stderr.write("no apikey given and FH_API_KEY unset, aborting\n")
+            sys.exit(1)
+    
+    match = FIDre.match(args.fileid)
+    if match is None:
+        sys.stderr.write('fileid does not match format, aborting\n')
+        sys.exit(1)
+
+    if args.version:
+        if not VERre.match(args.version):
+            sys.stderr.write("version must be numeric and can have one decimal place\n")
+            sys.exit(1)
+    
+    if not os.path.exists(args.FILE[0]):
+        sys.stderr.write(f"file {args.FILE[0]} not found\n")
+        sys.exit(1)
+
+    postdata = {
+        'apikey': args.apikey,
+        'fileid': args.fileid,
+        'action': args.action,
+    }
+    if args.version:
+        postdata['version'] = args.version
+    if args.versiontext:
+        postdata['versiontext'] = args.versiontext
+
+    req = requests.post(args.url, data=postdata, files={
+        'sendfile': (os.path.split(args.FILE[0])[1], open(args.FILE[0], 'rb'), 'application/binary'),
+    })
+    if req.status_code != 200:
+        sys.stderr.write('Failed to connect to filehost!\n')
+        sys.exit(2)
+    
+    try:
+        response = req.json()
+    except:
+        sys.stderr.write('Failed to parse response\n')
+        sys.exit(2)
+    
+    if response['state'] != 'OK':
+        sys.stderr.write('Filehost returned %(state)s: %(message)s\n' % response)
+        sys.exit(3)
+    
+    sys.stdout.write(f'{response["message"]}\n')
+    sys.exit(0)
+
+if __name__ == '__main__':
+    main()

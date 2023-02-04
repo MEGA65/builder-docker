@@ -21,6 +21,7 @@ RUN apt update \
  && chown -R mega:mega /home/mega/.Xilinx
 
 COPY --chown=mega:mega Vivado_init.tcl /home/mega/.Xilinx/Vivado/Vivado_init.tcl
+COPY filehost-upload /usr/local/bin/filehost-upload
 
 # build and install exomizer
 RUN mkdir /tmp/exomizer \
