@@ -31,5 +31,5 @@ Adds texlive for megabuild, as needed by mega65-user-guide.
 ## vivadomnt
 
 A volume install using megabuild, that mounts to /opt/Xilinx
-You need to use `--init -v vivado_2019_2:/opt/Xilinx` to use it together with megabuild for a core build.
+You need to use `--init -v vivado_VVVV_W:/opt/Xilinx` to use it together with megabuild for a core build.
 
