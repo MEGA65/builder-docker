@@ -31,5 +31,6 @@ RUN mkdir /tmp/exomizer \
  && cd src \
  && make \
  && cp exomizer /usr/local/bin \
- && chmod 755 /usr/local/bin/exomizer
+ && chmod 755 /usr/local/bin/exomizer \
+ && chmod 755 /usr/local/bin/filehost-upload
 
