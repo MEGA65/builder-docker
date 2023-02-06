@@ -4,6 +4,7 @@ FROM ubuntu:focal
 USER root
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TZ=Etc/UTC
+#RUN sed -i -e 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/de.archive.ubuntu.com\/ubuntu\//' /etc/apt/sources.list \
 RUN apt update \
  && apt install -y wget \
  && wget https://cli.github.com/packages/githubcli-archive-keyring.gpg -O /usr/share/keyrings/githubcli-archive-keyring.gpg \
@@ -31,6 +32,26 @@ RUN mkdir /tmp/exomizer \
  && cd src \
  && make \
  && cp exomizer /usr/local/bin \
- && chmod 755 /usr/local/bin/exomizer \
- && chmod 755 /usr/local/bin/filehost-upload
+ && cd \
+ && rm -rf /tmp/exomizer \
+ && chmod 755 /usr/local/bin/exomizer /usr/local/bin/filehost-upload
+
+## build and install mega65-tools needed on server
+RUN cd /tmp \
+ && git clone --depth 1 https://github.com/MEGA65/mega65-tools.git \
+ && cd mega65-tools \
+ && make DO_SMU=1 USE_LOCAL_CC65=1 bin/romdiff bin/bit2core bin/bit2mcs \
+ && cp bin/romdiff bin/bit2core bin/bit2mcs /usr/local/bin \
+ && cd \
+ && rm -rf /tmp/mega65-tools \
+ && chmod 755 /usr/local/bin/romdiff /usr/local/bin/bit2core /usr/local/bin/bit2mcs
+
+## build and install bsa
+RUN cd /tmp \
+ && git clone --depth 1 https://github.com/MEGA65/BSA.git \
+ && cd BSA \
+ && gcc -o /usr/local/bin/bsa bsa.c \
+ && cd \
+ && rm -rf /tmp/BSA \
+ && chmod 755 /usr/local/bin/bsa
 
