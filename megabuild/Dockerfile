@@ -13,14 +13,15 @@ RUN apt update \
  && apt update \
  && apt install -y build-essential pkg-config git gh wget python3 cc65 sshpass unzip imagemagick locales p7zip-full \
                    libusb-1.0-0-dev libgif-dev libpng-dev libgtest-dev libgmock-dev libreadline-dev libtinfo5 \
-				   libcairo2-dev gettext-base \
+				   libcairo2-dev gettext-base bsdiff python3-requests \
  && apt clean -y \
  && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
  && locale-gen \
  && useradd -u 1000 -d /home/mega -s /bin/bash -m mega \
- && mkdir -p /home/mega/.Xilinx/Vivado \
- && chown -R mega:mega /home/mega/.Xilinx
+ && mkdir -p /home/mega/.Xilinx/Vivado /home/mega/assets \
+ && chown -R mega:mega /home/mega/.Xilinx /home/mega/assets
 
+COPY --chown=mega:mega 910828.BIN /home/mega/assets/910828.BIN
 COPY --chown=mega:mega Vivado_init.tcl /home/mega/.Xilinx/Vivado/Vivado_init.tcl
 COPY filehost-upload /usr/local/bin/filehost-upload
 

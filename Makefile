@@ -18,7 +18,11 @@ jenkins: jenkins/Dockerfile jenkins/docker-compose.yml
 	@echo "\nBuilding jenkins container..."
 	@( cd jenkins ; docker-compose build && docker-compose up -d )
 
-megabuild: megabuild/Dockerfile
+megabuild/910828.BIN:
+	@echo "\nLinking Cloanto base ROM to megabuild..."
+	ln ../dist/910828.BIN megabuild/910828.BIN
+
+megabuild: megabuild/Dockerfile megabuild/910828.BIN
 	@echo "\nBuilding megabuild container..."
 	@docker build -t megabuild:latest megabuild
 
