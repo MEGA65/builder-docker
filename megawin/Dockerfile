@@ -3,7 +3,7 @@ FROM megabuild
 # install build dependecies
 USER root
 RUN apt install -y gcc-mingw-w64 mingw-w64-common libz-mingw-w64-dev python3-pip cmake \
- && pip3 install conan \
+ && pip3 install conan==1.57.0 \
  && apt clean -y
 
 USER mega

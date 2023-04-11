@@ -11,15 +11,16 @@ RUN apt update \
  && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list \
  && apt update \
- && apt install -y build-essential pkg-config git gh wget python3 cc65 sshpass unzip imagemagick locales p7zip-full \
+ && apt install -y build-essential pkg-config git gh wget python3 sshpass unzip imagemagick locales p7zip-full \
                    libusb-1.0-0-dev libgif-dev libpng-dev libgtest-dev libgmock-dev libreadline-dev libtinfo5 \
-				   libcairo2-dev gettext-base bsdiff python3-requests \
+				   libcairo2-dev gettext-base bsdiff python3-requests python3-paramiko \
  && apt clean -y \
  && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
  && locale-gen \
  && useradd -u 1000 -d /home/mega -s /bin/bash -m mega \
- && mkdir -p /home/mega/.Xilinx/Vivado /home/mega/assets \
- && chown -R mega:mega /home/mega/.Xilinx /home/mega/assets
+ && mkdir -p /home/mega/.ssh /home/mega/.Xilinx/Vivado /home/mega/assets \
+ && chown -R mega:mega /home/mega/.ssh /home/mega/.Xilinx /home/mega/assets \
+ && chmod 2700 /home/mega/.ssh
 
 COPY --chown=mega:mega 910828.BIN /home/mega/assets/910828.BIN
 COPY --chown=mega:mega Vivado_init.tcl /home/mega/.Xilinx/Vivado/Vivado_init.tcl
@@ -36,6 +37,15 @@ RUN mkdir /tmp/exomizer \
  && cd \
  && rm -rf /tmp/exomizer \
  && chmod 755 /usr/local/bin/exomizer /usr/local/bin/filehost-upload
+
+## build and install cc65 V2.19
+RUN cd /tmp \
+ && git clone --depth 1 --branch V2.19 https://github.com/cc65/cc65.git \
+ && cd cc65 \
+ && make PREFIX=/usr -j 8 \
+ && make PREFIX=/usr install \
+ && cd \
+ && rm -rf /tmp/cc65
 
 ## build and install mega65-tools needed on server
 RUN cd /tmp \
@@ -55,4 +65,10 @@ RUN cd /tmp \
  && cd \
  && rm -rf /tmp/BSA \
  && chmod 755 /usr/local/bin/bsa
+
+USER mega
+RUN ssh-keyscan -H t.ktk.de tardis.ktk.de 212.7.186.22 > /home/mega/.ssh/known_hosts \
+ && chmod 600 /home/mega/.ssh/known_hosts
+
+USER root
 
