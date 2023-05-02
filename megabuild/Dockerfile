@@ -49,7 +49,7 @@ RUN cd /tmp \
 
 ## build and install mega65-tools needed on server
 RUN cd /tmp \
- && git clone --depth 1 https://github.com/MEGA65/mega65-tools.git \
+ && git clone --depth 1 --branch development https://github.com/MEGA65/mega65-tools.git \
  && cd mega65-tools \
  && make DO_SMU=1 USE_LOCAL_CC65=1 bin/romdiff bin/bit2core bin/bit2mcs \
  && cp bin/romdiff bin/bit2core bin/bit2mcs /usr/local/bin \
