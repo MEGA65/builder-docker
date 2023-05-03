@@ -38,9 +38,9 @@ RUN mkdir /tmp/exomizer \
  && rm -rf /tmp/exomizer \
  && chmod 755 /usr/local/bin/exomizer /usr/local/bin/filehost-upload
 
-## build and install cc65 V2.19
+## build and install cc65 MASTER
 RUN cd /tmp \
- && git clone --depth 1 --branch V2.19 https://github.com/cc65/cc65.git \
+ && git clone --depth 1 https://github.com/cc65/cc65.git \
  && cd cc65 \
  && make PREFIX=/usr -j 8 \
  && make PREFIX=/usr install \
