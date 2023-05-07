@@ -8,53 +8,56 @@ CONTAINERS=traefik \
 		   megatex
 VOLUMES=vivadomnt
 
-.PHONY: all $(CONTAINERS) $(VOLUMES)
+.PHONY: all prune $(CONTAINERS) $(VOLUMES)
 
 all: $(CONTAINERS)
 
+prune:
+	@echo -e "\nPruning docker images..."
+	@docker image prune -f
+
 traefik: traefik/docker-compose.yml
-	@echo "\nBuilding traefik container..."
+	@echo -e "\nBuilding traefik container..."
 	@( cd traefik ; docker-compose build && docker-compose up -d )
 
 jenkins: jenkins/Dockerfile jenkins/docker-compose.yml
-	@echo "\nBuilding jenkins container..."
+	@echo -e "\nBuilding jenkins container..."
 	@( cd jenkins ; docker-compose build && docker-compose up -d )
 
 megabuild/910828.BIN:
-	@echo "\nLinking Cloanto base ROM to megabuild..."
+	@echo -e "\nLinking Cloanto base ROM to megabuild..."
 	ln ../dist/910828.BIN megabuild/910828.BIN
 
 megabuild: megabuild/Dockerfile megabuild/910828.BIN
-	@echo "\nBuilding megabuild container..."
+	@echo -e "\nBuilding megabuild container..."
 	if [[ -n FORCE ]]; then \
-		echo "YES"; \
 		docker build -t megabuild:latest --build-arg CC65_VERSION=`date +%s` megabuild ;\
 	else \
 		docker build -t megabuild:latest megabuild ;\
 	fi	
 
 megawin: megawin/Dockerfile
-	@echo "\nBuilding megawin container..."
+	@echo -e "\nBuilding megawin container..."
 	@docker build -t megawin:latest megawin
 
 megatex: megatex/Dockerfile
-	@echo "\nBuilding megatex container..."
+	@echo -e "\nBuilding megatex container..."
 	@docker build -t megatex:latest megatex
 
 vivadomnt/Vivado-2019.2-installed.tar.gz:
-	@echo "\nLinking frozen Vivado to vivadomnt..."
+	@echo -e "\nLinking frozen Vivado to vivadomnt..."
 	ln ../dist/Vivado-2019.2-installed.tar.gz vivadomnt/Vivado-2019.2-installed.tar.gz
 
 vivadomnt/Vivado-2022.2-installed.tar.gz:
-	@echo "\nLinking frozen Vivado to vivadomnt..." ; \
+	@echo -e "\nLinking frozen Vivado to vivadomnt..." ; \
 	ln ../dist/Vivado-2022.2-installed.tar.gz vivadomnt/Vivado-2022.2-installed.tar.gz
 
 vivadomnt_2019_2: vivadomnt/Vivado-2019.2-installed.tar.gz vivadomnt/vivado_wrapper.sh vivadomnt/vivado_unpack.sh
-	@echo "\nBuilding vivado_2019_2 volume..."; \
+	@echo -e "\nBuilding vivado_2019_2 volume..."; \
 	if [ $( docker volume inspect vivado_2019_2 ) ]; then \
 		docker volume rm vivado_2019_2; \
 	fi
-	@echo "\nMaking wrapper scripts..."; \
+	@echo -e "\nMaking wrapper scripts..."; \
 	perl -pe 's/==VER==/2019.2/g' < vivadomnt/vivado_unpack.sh > vivadomnt/vivado_unpack_2019_2.sh ; \
 	perl -pe 's/==VER==/2019.2/g' < vivadomnt/vivado_wrapper.sh > vivadomnt/vivado_wrapper_2019_2.sh
 	docker volume create vivado_2019_2
@@ -66,11 +69,11 @@ vivadomnt_2019_2: vivadomnt/Vivado-2019.2-installed.tar.gz vivadomnt/vivado_wrap
 		megabuild bash vivado_unpack.sh
 
 vivadomnt_2022_2: vivadomnt/Vivado-2022.2-installed.tar.gz vivadomnt/vivado_wrapper.sh vivadomnt/vivado_unpack.sh
-	@echo "\nBuilding vivado_2022_2 volume..."; \
+	@echo -e "\nBuilding vivado_2022_2 volume..."; \
 	if [ $( docker volume inspect vivado_2022_2 ) ]; then \
 		docker volume rm vivado_2022_2; \
 	fi
-	@echo "\nMaking wrapper scripts..."; \
+	@echo -e "\nMaking wrapper scripts..."; \
 	perl -pe 's/==VER==/2022.2/g' < vivadomnt/vivado_unpack.sh > vivadomnt/vivado_unpack_2022_2.sh ; \
 	perl -pe 's/==VER==/2022.2/g' < vivadomnt/vivado_wrapper.sh > vivadomnt/vivado_wrapper_2022_2.sh
 	docker volume create vivado_2022_2
