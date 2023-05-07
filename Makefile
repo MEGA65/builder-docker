@@ -1,4 +1,6 @@
 
+SHELL := /bin/bash
+
 CONTAINERS=traefik \
 		   jenkins \
 		   megabuild \
@@ -24,7 +26,12 @@ megabuild/910828.BIN:
 
 megabuild: megabuild/Dockerfile megabuild/910828.BIN
 	@echo "\nBuilding megabuild container..."
-	@docker build -t megabuild:latest megabuild
+	if [[ -n FORCE ]]; then \
+		echo "YES"; \
+		docker build -t megabuild:latest --build-arg CC65_VERSION=`date +%s` megabuild ;\
+	else \
+		docker build -t megabuild:latest megabuild ;\
+	fi	
 
 megawin: megawin/Dockerfile
 	@echo "\nBuilding megawin container..."

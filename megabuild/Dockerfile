@@ -39,6 +39,7 @@ RUN mkdir /tmp/exomizer \
  && chmod 755 /usr/local/bin/exomizer /usr/local/bin/filehost-upload
 
 ## build and install cc65 MASTER
+ARG CC65_VERSION=unknown
 RUN cd /tmp \
  && git clone --depth 1 https://github.com/cc65/cc65.git \
  && cd cc65 \
@@ -48,6 +49,7 @@ RUN cd /tmp \
  && rm -rf /tmp/cc65
 
 ## build and install mega65-tools needed on server
+ARG M65TOOLS_VERSION=unknown
 RUN cd /tmp \
  && git clone --depth 1 --branch development https://github.com/MEGA65/mega65-tools.git \
  && cd mega65-tools \
@@ -58,6 +60,7 @@ RUN cd /tmp \
  && chmod 755 /usr/local/bin/romdiff /usr/local/bin/bit2core /usr/local/bin/bit2mcs
 
 ## build and install bsa
+ARG BSA_VERSION=unknown
 RUN cd /tmp \
  && git clone --depth 1 https://github.com/MEGA65/BSA.git \
  && cd BSA \
