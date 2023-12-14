@@ -29,8 +29,8 @@ COPY filehost-upload /usr/local/bin/filehost-upload
 # build and install exomizer
 RUN mkdir /tmp/exomizer \
  && cd /tmp/exomizer \
- && wget https://bitbucket.org/magli143/exomizer/wiki/downloads/exomizer-3.1.1.zip \
- && unzip exomizer-3.1.1.zip \
+ && wget https://bitbucket.org/magli143/exomizer/wiki/downloads/exomizer-3.1.2.zip \
+ && unzip exomizer-3.1.2.zip \
  && cd src \
  && make \
  && cp exomizer /usr/local/bin \

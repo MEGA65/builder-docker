@@ -84,3 +84,19 @@ vivadomnt_2022_2: vivadomnt/Vivado-2022.2-installed.tar.gz vivadomnt/vivado_wrap
 		-v `pwd`/vivadomnt/vivado_unpack_2022_2.sh:/vivado_unpack.sh \
 		megabuild bash vivado_unpack.sh
 
+vivadomnt_2023_2: vivadomnt/Vivado-2023.2-installed.tar.gz vivadomnt/vivado_wrapper.sh vivadomnt/vivado_unpack.sh
+	@echo -e "\nBuilding vivado_2023_2 volume..."; \
+	if [ $( docker volume inspect vivado_2023_2 ) ]; then \
+		docker volume rm vivado_2023_2; \
+	fi
+	@echo -e "\nMaking wrapper scripts..."; \
+	perl -pe 's/==VER==/2023.2/g' < vivadomnt/vivado_unpack.sh > vivadomnt/vivado_unpack_2023_2.sh ; \
+	perl -pe 's/==VER==/2023.2/g' < vivadomnt/vivado_wrapper.sh > vivadomnt/vivado_wrapper_2023_2.sh
+	docker volume create vivado_2023_2
+	docker run --rm \
+		-v vivado_2023_2:/opt/Xilinx \
+		-v `pwd`/vivadomnt/Vivado-2023.2-installed.tar.gz:/Vivado-2023.2-installed.tar.gz \
+		-v `pwd`/vivadomnt/vivado_wrapper_2023_2.sh:/vivado_wrapper.sh \
+		-v `pwd`/vivadomnt/vivado_unpack_2023_2.sh:/vivado_unpack.sh \
+		megabuild bash vivado_unpack.sh
+
