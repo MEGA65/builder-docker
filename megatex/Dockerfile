@@ -1,7 +1,7 @@
 FROM megabuild
 
 # install texlive
-RUN apt install -y texlive-latex-extra texlive-bibtex-extra texlive-xetex latexmk xzdec \
+RUN apt install -y texlive-latex-extra texlive-bibtex-extra texlive-xetex latexmk xzdec inkscape \
  && apt clean -y
 
 # install texmf stuff in user path
