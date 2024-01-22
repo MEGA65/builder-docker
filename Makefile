@@ -30,8 +30,8 @@ megabuild/910828.BIN:
 
 megabuild: megabuild/Dockerfile megabuild/910828.BIN
 	@echo -e "\nBuilding megabuild container..."
-	if [[ -n FORCE ]]; then \
-		docker build -t megabuild:latest --build-arg CC65_VERSION=`date +%s` megabuild ;\
+	if [[ -n "$(FORCE)" ]]; then \
+		docker build --no-cache=true -t megabuild:latest --build-arg CC65_VERSION=`date +%s` megabuild ;\
 	else \
 		docker build -t megabuild:latest megabuild ;\
 	fi	

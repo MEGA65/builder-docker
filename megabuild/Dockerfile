@@ -41,8 +41,9 @@ RUN mkdir /tmp/exomizer \
 ## build and install cc65 MASTER
 ARG CC65_VERSION=unknown
 RUN cd /tmp \
- && git clone --depth 1 https://github.com/cc65/cc65.git \
+ && git clone https://github.com/cc65/cc65.git \
  && cd cc65 \
+ && git checkout 79018fd424bcf64533f82a19167f25b5fc02d1de \
  && make PREFIX=/usr -j 8 \
  && make PREFIX=/usr install \
  && cd \
