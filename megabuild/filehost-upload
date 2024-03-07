@@ -15,7 +15,7 @@ def main():
     parser.add_argument('-U', '--url', default="https://files.mega65.org/php/savebuildupload.php", help="URL of filehost")
     parser.add_argument('-A', '--apikey', help="authentication with filehost, can alos be provided via FH_API_KEY environment")
     parser.add_argument('-i', '--fileid', required=True, help="public-id of the file entry to upload to")
-    parser.add_argument('-a', '--action', default="addversion", choices=['addversion', 'replacelatest', 'replaceall'], help="action to perform: addversion, replacelatest, replaceall")
+    parser.add_argument('-a', '--action', default="addversion", choices=['addversion', 'replacelatest', 'replacekeepversion', 'replaceall'], help="action to perform: addversion, replacelatest, replacekeepversion, replaceall")
     parser.add_argument('-V', '--version', help="version number (XXX.X)")
     parser.add_argument('-I', '--versiontext', help="version information text")
     parser.add_argument('FILE', nargs=1, help="file you want to upload")
