@@ -54,8 +54,8 @@ ARG M65TOOLS_VERSION=unknown
 RUN cd /tmp \
  && git clone --depth 1 --branch development https://github.com/MEGA65/mega65-tools.git \
  && cd mega65-tools \
- && make DO_SMU=1 USE_LOCAL_CC65=1 bin/romdiff bin/bit2core bin/bit2mcs \
- && cp bin/romdiff bin/bit2core bin/bit2mcs /usr/local/bin \
+ && make DO_SMU=1 USE_LOCAL_CC65=1 bin/romdiff bin/bit2core bin/bit2mcs bin/coretool \
+ && cp bin/romdiff bin/bit2core bin/bit2mcs bin/coretool /usr/local/bin \
  && cd \
  && rm -rf /tmp/mega65-tools \
  && chmod 755 /usr/local/bin/romdiff /usr/local/bin/bit2core /usr/local/bin/bit2mcs
