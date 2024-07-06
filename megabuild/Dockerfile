@@ -13,7 +13,7 @@ RUN apt update \
  && apt update \
  && apt install -y build-essential pkg-config git gh wget python3 sshpass unzip imagemagick locales p7zip-full \
                    libusb-1.0-0-dev libgif-dev libpng-dev libgtest-dev libgmock-dev libreadline-dev libtinfo5 \
-				   libcairo2-dev gettext-base bsdiff python3-requests python3-paramiko \
+				   libcairo2-dev gettext-base bsdiff python3-requests python3-paramiko python-is-python3 \
  && apt clean -y \
  && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
  && locale-gen \
