@@ -1,5 +1,6 @@
 ARG JENKINS_VERSION
-FROM jenkins/jenkins:${JENKINS_VERSION}
+ARG JDK_VERSION
+FROM jenkins/jenkins:${JENKINS_VERSION}-${JDK_VERSION}
 USER root
 RUN apt update \
  && apt install -y apt-transport-https ca-certificates curl gnupg lsb-release \

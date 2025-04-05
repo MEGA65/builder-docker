@@ -1,11 +1,11 @@
-version: '3'
 services:
   jenkins:
     image: localjenkins
     build:
       context: .
       args:
-        JENKINS_VERSION: "2.500"
+        JENKINS_VERSION: "2.504"
+        JDK_VERSION: "jdk21"
     restart: on-failure
     ports:
       - "127.0.0.1:8080:8080"
