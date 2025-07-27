@@ -4,7 +4,7 @@ services:
     build:
       context: .
       args:
-        JENKINS_VERSION: "2.504"
+        JENKINS_VERSION: "2.520"
         JDK_VERSION: "jdk21"
     restart: on-failure
     ports:
